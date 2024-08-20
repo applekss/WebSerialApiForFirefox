@@ -254,6 +254,17 @@ class Serial extends EventTarget {
 	}
 
 	async requestPort(options?: SerialPortRequestOptions): Promise<SerialPort> {
+		// Define the USB vendor ID to filter by
+        const USB_VENDOR_ID = 9412;
+
+        // Prepare filters including the specific USB vendor ID
+        const filteredOptions: SerialPortRequestOptions = {
+            ...options,
+            filters: [
+                ...(options?.filters || []),
+                { usbVendorId: USB_VENDOR_ID }
+            ]
+        };
 		const port = await WebSerialPolyfill.requestPort(options)
 		return new SerialPort(port)
 	}
